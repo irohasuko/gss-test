@@ -57,7 +57,27 @@ def extract_dif_by_compare_cd(base, compare):
     unique_in_base = {item for item in base if item[constants.ROW_COMPARE_CD] not in compare_compare_cd_set}
     
     return unique_in_base
+
+def extract_dif(base, compare):
+    """baseとcompareの差分があるものを比較用コードを基に抽出
+    """
+
+    dict1 = {}
+    dict2 = {}
     
+    for item in base:
+        dict1[item[constants.ROW_COMPARE_CD]] = item  # 1列目をキー、タプル全体を値に
+    
+    for item in compare:
+        dict2[item[constants.ROW_COMPARE_CD]] = item
+    
+    # 1列目が同じで2列目が異なるタプルを収集
+    result = set()
+    for key in dict1.keys() & dict2.keys():  # 共通の1列目を持つキーのみ
+        if dict1[key][constants.ROW_DEP_NAME] != dict2[key][constants.ROW_DEP_NAME]:  # 2列目の要素が異なる場合
+            result.add(dict1[key])
+    
+    return result    
 
 def to_excel(data, sheet_name, overwrite):
     """エクセルを出力

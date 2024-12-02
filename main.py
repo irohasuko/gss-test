@@ -98,9 +98,42 @@ def compare_unv_del(former="", current=""):
     
     util.to_excel(del_data, constants.DEL_UNV, True)
 
+def compare_unv_dif(former="", current=""):
+    """差分のある大学情報をExcelで出力
+    """
+    
+    # 最新2つのファイル名を取得
+    if former=="" or current=="":
+        file_names = util.extract_file_name()
+        former = file_names[0]
+        current = file_names[1]
+    
+    # それぞれのファイル読み込み
+    former_data = []
+    with open("./dbdata/" + former, "r", encoding="utf_8", newline="") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            former_data.append(tuple(row))
+    
+    former_data_set = util.extract_unv_data(former_data)
+    
+    current_data = []
+    with open("./dbdata/" + current, "r", encoding="utf_8", newline="") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            current_data.append(tuple(row))
+            
+    current_data_set = util.extract_unv_data(current_data)
+    
+    # 現在データで差分のあるされた要素を抽出
+    del_data = util.extract_dif(current_data_set, former_data_set)
+    
+    util.to_excel(del_data, constants.DIF_UNV, True)
+
 
 if __name__ == '__main__':
     # current_data = get_current_data()
     # exp_name = store_csv(current_data)
     compare_unv_add()
     compare_unv_del()
+    compare_unv_dif()

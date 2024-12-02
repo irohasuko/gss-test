@@ -42,3 +42,22 @@ def test_extract_dif_by_compare_cd():
     }
     
     assert util.extract_dif_by_compare_cd(base, compare) == expected
+
+def test_extract_dif():
+    base = {
+        ('11', '12', '13', '14', '経済', '16', '1000'),
+        ('21', '22', '23', '24', '工学', '26', '2000'),
+        ('31', '32', '33', '34', '35', '36', '3000'),
+    }
+    
+    compare = {
+        ('11', '12', '13', '14', '商', '16', '1000'),
+        ('21', '22', '23', '24', '工学', '26', '2001'),
+        ('31', '32', '33', '34', '35', '36', '3000'),
+    }
+    
+    expected = {
+        ('11', '12', '13', '14', '経済', '16', '1000')
+    }
+    
+    assert util.extract_dif(base, compare) == expected
